@@ -1,52 +1,49 @@
 # Solution_G_Naveen_Raaghavendran_Emtensor
-Brain MRI Segmentation using U-Net
-
-# Brain MRI Segmentation using U-Net
+# Brain Tumor Segmentation using UNet
 
 ## Project Overview
-This project focuses on automated brain segmentation using deep learning models. Initially, the nnU-Net framework was explored but was found to be infeasible due to GPU limitations. Instead, a custom U-Net model was implemented using the MONAI library to achieve segmentation.
+This project focuses on automated brain tumor segmentation using deep learning models. Initially, we attempted to use `nnUNet`, but due to GPU limitations (torch.cuda being `False`), we switched to a pretrained `UNet` model from MONAI. The project includes dataset preprocessing, model training, inference, and statistical analysis to compare segmented volumes.
 
-## Challenges Faced
-- **GPU Limitations**: The environment lacked GPU availability (`torch.cuda.is_available()` returned `False`), making training significantly slower.
-- **Data Preprocessing**: Handling `.nii` files efficiently and ensuring correct input dimensions for the model.
-- **Model Selection**: Due to computational constraints, a lighter version of U-Net was preferred over nnU-Net.
-- **Statistical Analysis**: Assessing segmentation outputs quantitatively to validate performance.
+## Dataset
+The dataset used is named **brats_dataset**. Please download and place it accordingly as mentioned in the `.ipynb` file.
 
 ## Implementation Steps
-### 1. Dataset Processing
-- Loaded `.nii` files using NiBabel.
-- Normalized image data and ensured correct tensor dimensions.
-- Used `DataLoader` to batch-process images efficiently.
+1. **Data Loading & Preprocessing:**
+   - Used `nibabel` to load `.nii` files.
+   - Normalized images and converted them to tensors.
+   - Created a custom `Dataset` class and `DataLoader` for batching.
 
-### 2. Model Selection
-- Implemented a **3D U-Net** using MONAI.
-- Configured `in_channels=1`, `out_channels=1`, and `spatial_dims=3`.
+2. **Model Selection:**
+   - Initially attempted `nnUNet` but switched to `UNet` from MONAI due to GPU constraints.
+   - The model was trained using **Adam optimizer** and **BCEWithLogitsLoss**.
 
-### 3. Training
-- Used **Binary Cross Entropy Loss** with an **Adam optimizer**.
-- Adjusted input dimensions to be multiples of 16 for U-Net compatibility.
-- Trained on CPU due to hardware limitations, requiring reduced batch sizes.
+3. **Training & Evaluation:**
+   - Training loop with batch normalization and interpolation for resizing.
+   - Model performance analyzed through segmentation output.
 
-### 4. Inference & Visualization
-- Applied segmentation on test images.
-- Used `matplotlib` to visualize mid-slices of 3D outputs.
+4. **Inference:**
+   - Segmentation applied to new samples.
+   - Plots generated to visualize segmentation outputs.
 
-### 5. Statistical Analysis
-- Computed segmented volume differences across sample groups.
-- Performed a **T-test** to analyze statistical significance.
-- Visualized distribution using histograms and box plots.
+5. **Statistical Analysis:**
+   - Compared segmented tumor volumes across samples.
+   - **T-test** performed to analyze variations.
+   - Graphs plotted for better visualization.
 
 ## Installation & Setup
-To run the code, install the required dependencies:
+To run this project, install the necessary dependencies:
+
 ```sh
-pip install torch torchvision monai nibabel scipy matplotlib
+pip install torch torchvision torchaudio monai nibabel scipy matplotlib numpy
 ```
 
-## Running the Code
-1. Clone the repository.
-2. Install the required dependencies.
-3. Run the provided Jupyter Notebook (`.ipynb` file) for step-by-step execution.
+Run the Jupyter Notebook (`.ipynb` file) to execute the steps as described.
 
-The complete implementation is available as an **IPython Notebook (ipynb file)** for reproducibility.
+## Code Availability
+The complete implementation, including preprocessing, training, and analysis, is available as a **Jupyter Notebook (`.ipynb`) file**. Follow the steps mentioned to replicate results.
+
+---
+
+
 
 
